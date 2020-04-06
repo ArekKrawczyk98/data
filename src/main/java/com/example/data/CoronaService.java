@@ -9,6 +9,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class CoronaService {
@@ -23,9 +24,9 @@ public class CoronaService {
         return  coronaDataRetriever.getSummaryData().getCountries().stream().filter(
                 data -> name.equals(data.getCountrySlug())).findAny().orElse(null);
     }
-    public void saveDataToFile(CoronaVirusData coronaVirusData,String countryName) throws IOException {
+    public boolean saveDataToFile(CoronaVirusData coronaVirusData,String countryName) throws IOException {
         if (countryName.equals("")){
-            return;
+            return false;
         }
         File file = new File("/home/arek/Pulpit/data/"+countryName+".txt");
      if (file.createNewFile()){
@@ -34,15 +35,15 @@ public class CoronaService {
 
      FileWriter fileWriter = new FileWriter(file.getAbsoluteFile(),true );
      String data = LocalDate.now()+" "+ coronaVirusData.toString();
-     boolean checkIfAlreadyAddedDataToday = false;
+     boolean checkIfAlreadyAddedDataToday;
      String lastLine;
      ReversedLinesFileReader lineReader = new ReversedLinesFileReader(file, Charset.defaultCharset());
      try {
          lastLine = lineReader.readLine();
-         checkIfAlreadyAddedDataToday = lastLine.contains(LocalDate.now().toString());
+         checkIfAlreadyAddedDataToday = lastLine.contains(coronaVirusData.getTotalConfirmed().toString());
 
          if (checkIfAlreadyAddedDataToday){
-             return;
+             return false;
          }
 
 
@@ -55,16 +56,24 @@ public class CoronaService {
      fileWriter.flush();
      fileWriter.close();
 
+     return true;
+
 
     }
 
-    public void saveAllData(List<CoronaVirusData> dataList){
+    public boolean saveAllData(List<CoronaVirusData> dataList){
+        AtomicBoolean isDataSaved = new AtomicBoolean(false);
         dataList.forEach(c -> {
             try {
-                saveDataToFile(c,c.getCountry());
+                isDataSaved.set(saveDataToFile(c, c.getCountry()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+        return isDataSaved.get();
+    }
+
+    public CoronaVirusData getGlobalData() throws IOException, InterruptedException {
+        return coronaDataRetriever.getSummaryData().getGlobalData();
     }
 }

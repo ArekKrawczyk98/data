@@ -1,0 +1,1 @@
+Simple project for tracking coronavirus data 
