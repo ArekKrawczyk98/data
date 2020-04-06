@@ -13,6 +13,7 @@
     <version>0.0.1</version>
     <name>data</name>
     <description>Data project</description>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>11</java.version>
@@ -47,13 +48,15 @@
         </dependency>
     </dependencies>
 
-<!--    <build>
+    <build>
         <plugins>
             <plugin>
+                <!-- Build an executable JAR -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.2.6.RELEASE</version>
             </plugin>
         </plugins>
-    </build>-->
+    </build>
 
 </project>
