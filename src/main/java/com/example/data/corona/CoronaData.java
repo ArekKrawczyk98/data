@@ -21,9 +21,10 @@ public class CoronaData implements Serializable {
     @JsonProperty("Date")
     Date date;
 
-    CoronaData(){
+    CoronaData() {
     }
-    public List<CoronaVirusData> getCountries(){
+
+    public List<CoronaVirusData> getCountries() {
         return coronaVirusData;
     }
 }

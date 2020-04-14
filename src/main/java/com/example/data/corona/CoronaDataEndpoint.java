@@ -1,8 +1,6 @@
 package com.example.data.corona;
 
-import com.example.data.CoronaDataAnalyzer;
-import com.example.data.CoronaService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,12 +11,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-public class Endpoint {
+public class CoronaDataEndpoint {
 
-    @Autowired
+    final
     CoronaService coronaService;
-    @Autowired
+    final
     CoronaDataAnalyzer coronaDataAnalyzer;
+
+    public CoronaDataEndpoint(CoronaService coronaService, CoronaDataAnalyzer coronaDataAnalyzer) {
+        this.coronaService = coronaService;
+        this.coronaDataAnalyzer = coronaDataAnalyzer;
+    }
 
     @GetMapping
     public List<CoronaVirusData> defaultVirusData() throws InterruptedException, IOException {
@@ -37,37 +40,42 @@ public class Endpoint {
 
     @GetMapping("/save")
     public String saveAllData() throws IOException, InterruptedException {
-        boolean isSavingSuccessful =  coronaService.saveAllData(defaultVirusData());
-        if (isSavingSuccessful){
+        boolean isSavingSuccessful = coronaService.saveAllData(defaultVirusData());
+        if (isSavingSuccessful) {
             return "Data saved!";
-        }
-        else {
+        } else {
             return "Data didnt save";
         }
     }
+
     @GetMapping("/{country}/deathrate")
-    public String deathRate(@PathVariable("country") String country) throws IOException, InterruptedException {
+    public String deathRate(@PathVariable("country") String country){
         String realName = country.toLowerCase();
-        CoronaVirusData virusData = coronaService.showDataForSpecificCountry(realName);
-        return coronaDataAnalyzer
-                .virusDeathRate(virusData)
-                .toString()
-                +"%";
+        try {
+            CoronaVirusData virusData = coronaService.showDataForSpecificCountry(realName);
+            return coronaDataAnalyzer
+                    .virusDeathRate(virusData)
+                    .toString()
+                    + "%";
+        } catch (Exception e) {
+            return "Country doesnt exist in database";
+        }
 
 
     }
+
     @GetMapping("/global")
     public String globalData() throws IOException, InterruptedException {
         CoronaVirusData data = coronaService.getGlobalData();
 
         return "Corona virus data for " + LocalDate.now()
-                + "\nNew confirmed:"+data.getNewConfirmed()
+                + "\nNew confirmed:" + data.getNewConfirmed()
                 + "\nTotal confirmed:" + data.getTotalConfirmed()
                 + "\nNew deaths:" + data.getNewDeaths()
                 + "\nTotal deaths:" + data.getTotalDeaths()
-                + "\nNew recovered:"+ data.getNewRecovered()
+                + "\nNew recovered:" + data.getNewRecovered()
                 + "\nTotal recovered:" + data.getTotalRecovered()
-                + "\nDeath rate:"+coronaDataAnalyzer.virusDeathRate(data).setScale(4, RoundingMode.HALF_UP).doubleValue()+"%";
+                + "\nDeath rate:" + coronaDataAnalyzer.virusDeathRate(data).setScale(4, RoundingMode.HALF_UP).doubleValue() + "%";
     }
 
 }

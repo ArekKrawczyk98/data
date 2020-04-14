@@ -1,37 +1,35 @@
 package com.example.data.corona;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Date;
 
 
 @Getter
 @NoArgsConstructor
 @Setter
-@JsonIgnoreProperties({"Date","CountryCode"})
+@JsonIgnoreProperties({"Date", "CountryCode"})
 public class CoronaVirusData implements Serializable {
     @JsonProperty("Country")
-    private  String country;
+    private String country;
     @JsonProperty("Slug")
-    private  String countrySlug;
+    private String countrySlug;
     @JsonProperty("NewConfirmed")
-    private  Integer newConfirmed;
+    private Integer newConfirmed;
     @JsonProperty("TotalConfirmed")
-    private  Integer totalConfirmed;
+    private Integer totalConfirmed;
     @JsonProperty("NewDeaths")
-    private  Integer newDeaths;
+    private Integer newDeaths;
     @JsonProperty("TotalDeaths")
-    private  Integer totalDeaths;
+    private Integer totalDeaths;
     @JsonProperty("NewRecovered")
-    private  Integer newRecovered;
+    private Integer newRecovered;
     @JsonProperty("TotalRecovered")
-    private  Integer totalRecovered;
-
-
+    private Integer totalRecovered;
 
 
     @Override
