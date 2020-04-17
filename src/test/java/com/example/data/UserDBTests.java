@@ -10,15 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserTest {
+public class UserDBTests {
     @Autowired
     UserMongoData userMongoData;
     List<String> countriesForUser2 = List.of("Poland","Germany","United-States");
@@ -39,8 +38,25 @@ public class UserTest {
 
     @Test
     public void shouldGetPiotrsList(){
-        List <String> countries = this.userMongoData.findByUsername("Piotr").getCountriesTracked();
+        Optional<User> optionalUser = this.userMongoData.findByUsername("Piotr");
+        List <String> countries = optionalUser.map(User::getCountriesTracked).orElse(Collections.emptyList());
         assertEquals(countries,countriesForUser2);
+    }
+
+    @Test
+    public void shouldUpdateUser(){
+        String name = "Hubert";
+        Optional<User> optionalUser = this.userMongoData.findByUsername("Piotr");
+        User userUpdated = optionalUser.map(user -> user.changeName(name))
+                .orElseThrow();
+        assertEquals(userUpdated.getUsername(),"Hubert");
+        this.userMongoData.delete(optionalUser.get());
+        this.userMongoData.save(userUpdated);
+        List<String> listOfCountries  = this.userMongoData.findByUsername("Hubert")
+                .map(User::getCountriesTracked)
+                .orElseThrow();
+        assertEquals(listOfCountries,countriesForUser2);
+
     }
 
     @After

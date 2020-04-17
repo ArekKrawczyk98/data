@@ -14,4 +14,8 @@ public class User {
     String username;
     String password;
     List<String> countriesTracked;
+
+    public User changeName(String name){
+        return new User(id,name,password,countriesTracked);
+    }
 }
