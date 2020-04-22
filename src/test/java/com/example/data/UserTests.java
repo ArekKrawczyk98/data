@@ -2,6 +2,7 @@ package com.example.data;
 
 import com.example.data.user.User;
 import com.example.data.user.UserRepository;
+import com.example.data.user.UserRole;
 import com.example.data.user.UserService;
 import org.junit.Test;
 
@@ -19,6 +20,7 @@ public class UserTests {
         final User user = new User(UUID.randomUUID().toString(),
                 "Arkadiusz",
                 "password123",
+                UserRole.ADMIN,
                 Collections.emptyList());
 
         assertTrue(userService.verifyUser(user));
@@ -30,6 +32,7 @@ public class UserTests {
         final User user = new User(UUID.randomUUID().toString(),
                 "Arkadiusz",
                 "password123",
+                UserRole.ADMIN,
                 Collections.emptyList());
         assertNotNull(userService.addUserToDb(user));
     }
@@ -38,6 +41,7 @@ public class UserTests {
         final User user = new User(UUID.randomUUID().toString(),
                 "Arkadiusz",
                 "password123",
+                UserRole.ADMIN,
                 Collections.emptyList());
 
         User userFromDb = userService.registerUser(user);

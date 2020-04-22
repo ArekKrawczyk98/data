@@ -1,7 +1,6 @@
 package com.example.data.corona;
 
 import org.apache.commons.io.input.ReversedLinesFileReader;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -11,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Service
+
 public class CoronaService {
     CoronaDataRetriever coronaDataRetriever = new CoronaDataRetriever();
 

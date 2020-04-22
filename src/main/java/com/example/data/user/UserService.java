@@ -2,6 +2,8 @@ package com.example.data.user;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class UserService {
 
@@ -18,7 +20,12 @@ public class UserService {
         return !userExists && passwordMatch;
     }
     public User registerUser(User user){
+
         if (verifyUser(user)){
+            user = User.of(
+                    user.getId(),user.getUsername(),
+                    user.getPassword(),user.getRole(),
+                    user.getCountriesTracked());
             return this.addUserToDb(user);
         }
         else throw new IllegalStateException("Cannot register user");
@@ -30,4 +37,16 @@ public class UserService {
     public User getUser(String username) {
         return userRepository.load(username);
     }
+
+    public List<User> getAllUsers() {
+        return userRepository.loadAllUsers();
+    }
+    public User addCountriesTrackedToUser(User user, List<String> countriesTracked){
+       return userRepository.addToCountriesTracked(user,countriesTracked);
+
+    }
+    public Long deleteUserByUsername(String username){
+        return userRepository.deleteUserByUsername(username);
+    }
+
 }

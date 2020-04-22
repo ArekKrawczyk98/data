@@ -5,6 +5,8 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.Optional;
 
 @RepositoryRestResource
-public interface UserMongoData extends MongoRepository <User,Integer> {
+public interface UserMongoData extends MongoRepository <User,String> {
     Optional<User> findByUsername(String username);
+    Optional<Long> deleteByUsername(String username);
+    boolean existsByUsername(String username);
 }

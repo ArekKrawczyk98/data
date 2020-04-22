@@ -3,7 +3,9 @@ package com.example.data;
 import com.example.data.user.User;
 import com.example.data.user.UserRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class UserRepositoryInMemory implements UserRepository {
 
@@ -34,7 +36,23 @@ public class UserRepositoryInMemory implements UserRepository {
     }
 
     @Override
+    public User addToCountriesTracked(User user, List<String> list) {
+
+       return database.put(user.getId(),user.addToCountriesTracked(list));
+    }
+
+    @Override
+    public Long deleteUserByUsername(String username) {
+        return null;
+    }
+
+    @Override
     public boolean exists(User user) {
         return database.containsValue(user);
+    }
+
+    @Override
+    public List<User> loadAllUsers() {
+        return new ArrayList<>(database.values());
     }
 }

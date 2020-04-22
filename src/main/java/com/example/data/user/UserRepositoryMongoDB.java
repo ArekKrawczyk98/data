@@ -1,12 +1,12 @@
 package com.example.data.user;
 
 import lombok.Value;
-import org.springframework.data.domain.Example;
 
+import java.util.List;
 import java.util.Optional;
 
 @Value
-public class UserDAO implements UserRepository {
+public class UserRepositoryMongoDB implements UserRepository {
 
     UserMongoData userMongoData;
     @Override
@@ -29,7 +29,23 @@ public class UserDAO implements UserRepository {
     }
 
     @Override
+    public User addToCountriesTracked(User user, List<String> list) {
+        User userWithAddedCountries =  user.addToCountriesTracked(list);
+        return userMongoData.save(userWithAddedCountries);
+    }
+
+    @Override
+    public Long deleteUserByUsername(String username) {
+      return this.userMongoData.deleteByUsername(username).orElseThrow();
+    }
+
+    @Override
     public boolean exists(User user) {
-       return userMongoData.exists(Example.of(user));
+       return userMongoData.existsByUsername(user.getUsername());
+    }
+
+    @Override
+    public List<User> loadAllUsers() {
+        return userMongoData.findAll();
     }
 }
