@@ -45,7 +45,7 @@ public class UserTests {
                 Collections.emptyList());
 
         User userFromDb = userService.registerUser(user);
-        assertEquals(user,userFromDb);
+        assertEquals(user.getUsername(),userFromDb.getUsername());
     }
 
 }

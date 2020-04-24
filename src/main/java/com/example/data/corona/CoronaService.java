@@ -1,5 +1,6 @@
 package com.example.data.corona;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.input.ReversedLinesFileReader;
 
 import java.io.File;
@@ -7,12 +8,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
+@RequiredArgsConstructor
 public class CoronaService {
-    CoronaDataRetriever coronaDataRetriever = new CoronaDataRetriever();
+    private final CoronaDataRetriever coronaDataRetriever;
+    private final CoronaDataRepository dataRepository;
+    private final CoronaDataMapper mapper;
 
     public List<CoronaVirusData> showData() throws InterruptedException, IOException {
         CoronaData coronaData = coronaDataRetriever.getSummaryData();
@@ -50,7 +56,7 @@ public class CoronaService {
 
         } catch (Exception e) {
 
-            System.out.println(e);
+            System.err.println(e);
 
         }
         fileWriter.append(data);
@@ -77,4 +83,28 @@ public class CoronaService {
     public CoronaVirusData getGlobalData() throws IOException, InterruptedException {
         return coronaDataRetriever.getSummaryData().getGlobalData();
     }
+
+    public Long saveDataToDatabase(){
+        try {
+            if (!dataRepository.hasDataForToday())
+            return dataRepository.addData(mapper.mapFromWholeJSONToEntity(coronaDataRetriever.getSummaryData()));
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return 0L;
+
+    }
+
+    public CoronaVirusDocumentDB showDataForSpecificDay(LocalDate localDate) {
+        return dataRepository.showCoronaDataForSpecificDate(
+                Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+    }
+
+    public List<CoronaVirusDocumentDB> showDataFromDate1ToDate2(LocalDate localDate1,LocalDate localDate2){
+        Date date1 = Date.from(localDate1.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+        Date date2 = Date.from(localDate2.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+        return dataRepository.showCoronaDataFromDate1ToDate2(date1,date2);
+    }
+
 }

@@ -43,7 +43,9 @@ public class UserRepositoryInMemory implements UserRepository {
 
     @Override
     public Long deleteUserByUsername(String username) {
-        return null;
+        User user =  database.values().stream().filter(c -> c.getUsername().equals(username)).findAny().orElseThrow();
+        database.remove(user.getId());
+        return (long) database.size();
     }
 
     @Override

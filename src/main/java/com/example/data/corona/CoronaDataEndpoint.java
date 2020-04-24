@@ -1,8 +1,8 @@
 package com.example.data.corona;
 
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
+@RequestMapping("data")
 public class CoronaDataEndpoint {
 
     final
@@ -38,7 +39,7 @@ public class CoronaDataEndpoint {
 
     }
 
-    @GetMapping("/save")
+    @GetMapping("/saveLocally")
     public String saveAllData() throws IOException, InterruptedException {
         boolean isSavingSuccessful = coronaService.saveAllData(defaultVirusData());
         if (isSavingSuccessful) {
@@ -75,7 +76,30 @@ public class CoronaDataEndpoint {
                 + "\nTotal deaths:" + data.getTotalDeaths()
                 + "\nNew recovered:" + data.getNewRecovered()
                 + "\nTotal recovered:" + data.getTotalRecovered()
-                + "\nDeath rate:" + coronaDataAnalyzer.virusDeathRate(data).setScale(4, RoundingMode.HALF_UP).doubleValue() + "%";
+                + "\nDeath rate:" + coronaDataAnalyzer.virusDeathRate(data).
+                setScale(4, RoundingMode.HALF_UP).doubleValue() + "%";
+    }
+
+    @GetMapping("/saveToDatabase")
+    public Long saveToDatabase(){
+        return coronaService.saveDataToDatabase();
+    }
+
+    @GetMapping("{month}/{day}")
+    public CoronaVirusDocumentDB getDocumentForSpecificDay(@PathVariable("month") String month,@PathVariable("day")String day){
+        LocalDate localDate = LocalDate.of(2020,Integer.parseInt(month),Integer.parseInt(day));
+       return coronaService.showDataForSpecificDay(localDate);
+    }
+    @GetMapping("{month1}/{day1}/{month2}/{day2}")
+    public List<CoronaVirusDocumentDB> getDocumentsFromDate1ToDate2(@PathVariable("month1")String month1,
+                                                                    @PathVariable("month2")String month2,
+                                                                    @PathVariable("day1")String day1,
+                                                                    @PathVariable("day2")String day2){
+
+        LocalDate localDate1 = LocalDate.of(2020,Integer.parseInt(month1),Integer.parseInt(day1));
+        LocalDate localDate2 = LocalDate.of(2020,Integer.parseInt(month2),Integer.parseInt(day2));
+        return coronaService.showDataFromDate1ToDate2(localDate1,localDate2);
+
     }
 
 }
