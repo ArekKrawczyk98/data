@@ -8,6 +8,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserEmailService userEmailService;
 
     public User addUserToDb(User user) {
         return userRepository.save(user);
@@ -24,9 +25,13 @@ public class UserService {
         if (verifyUser(user)){
             user = User.of(
                     user.getId(),user.getUsername(),
-                    user.getPassword(),user.getRole(),
-                    user.getCountriesTracked());
-            return this.addUserToDb(user);
+                    user.getPassword(),user.getEmail(),
+                    user.getRole(), user.getCountriesTracked());
+
+            User userAdded =  this.addUserToDb(user);
+            userEmailService.sendEmail(userAdded);
+
+            return userAdded;
         }
         else throw new IllegalStateException("Cannot register user");
     }

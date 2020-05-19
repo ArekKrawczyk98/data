@@ -39,4 +39,32 @@ public class DataTests {
 
         assertEquals(1L,size.longValue());
     }
+
+    @Test
+    public void shouldShowCoronaDataForSpecificDate(){
+        CoronaVirusDocument coronaVirusDocument = CoronaVirusDocument.builder()
+                .date(new Date())
+                .country("Poland")
+                .deathRate(00.25)
+                .newConfirmed(123)
+                .totalConfirmed(1234)
+                .newDeaths(12)
+                .totalDeaths(13)
+                .newRecovered(100)
+                .totalRecovered(101)
+                .build();
+
+        CoronaVirusDocumentDB coronaVirusDocumentDB =
+                new CoronaVirusDocumentDB(
+                        UUID.randomUUID().toString(),
+                        Collections.singletonList(coronaVirusDocument),
+                        null,
+                        LocalDate.now());
+        Long size = coronaDataRepository.addData(coronaVirusDocumentDB);
+
+        CoronaVirusDocumentDB documentDB = coronaDataRepository.showCoronaDataForSpecificDate(new Date());
+
+        assertEquals(coronaVirusDocumentDB,documentDB);
+
+    }
 }

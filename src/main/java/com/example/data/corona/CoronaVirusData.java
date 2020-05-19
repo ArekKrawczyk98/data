@@ -2,16 +2,16 @@ package com.example.data.corona;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.io.Serializable;
 
 
 @Getter
 @NoArgsConstructor
-@Setter
+@AllArgsConstructor
 @JsonIgnoreProperties({"Date", "CountryCode"})
 public class CoronaVirusData implements Serializable {
     @JsonProperty("Country")

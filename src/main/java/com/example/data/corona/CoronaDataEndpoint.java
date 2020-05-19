@@ -1,11 +1,10 @@
 package com.example.data.corona;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.data.corona.dto.CoronaVirusListDTOWithTwoDates;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
@@ -99,6 +98,16 @@ public class CoronaDataEndpoint {
         LocalDate localDate1 = LocalDate.of(2020,Integer.parseInt(month1),Integer.parseInt(day1));
         LocalDate localDate2 = LocalDate.of(2020,Integer.parseInt(month2),Integer.parseInt(day2));
         return coronaService.showDataFromDate1ToDate2(localDate1,localDate2);
+
+    }
+
+    @GetMapping("/analyzeGrowthPerDay")
+    public BigDecimal getGrowthPerDay(@RequestBody CoronaVirusListDTOWithTwoDates coronaVirusDTOWithTwoDates){
+
+        return coronaDataAnalyzer.averageConfirmedGrowthPerDay(coronaVirusDTOWithTwoDates.getFirstDate(),
+                coronaVirusDTOWithTwoDates.getSecondDate(),
+                coronaVirusDTOWithTwoDates.getCoronaVirusData());
+
 
     }
 

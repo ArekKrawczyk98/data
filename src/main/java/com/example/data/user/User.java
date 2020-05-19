@@ -19,20 +19,21 @@ public class User implements UserDetails {
     String id;
     String username;
     String password;
+    String email;
     UserRole role;
     List<String> countriesTracked;
 
     public User changeName(String name){
-        return new User(id,name,password,role,countriesTracked);
+        return new User(id,name,password,email,role,countriesTracked);
     }
 
     public User addToCountriesTracked(List<String> countriesTracked) {
         this.countriesTracked.addAll(countriesTracked);
-        return new User(id,username,password,role,this.countriesTracked);
+        return new User(id,username,password,email,role,this.countriesTracked);
     }
 
-    public static User of(String id,String username,String password,UserRole role,List<String> countriesTracked){
-        return new User(id,username, BCrypt.hashpw(password,BCrypt.gensalt()),role,countriesTracked);
+    public static User of(String id,String username,String password,String email,UserRole role,List<String> countriesTracked){
+        return new User(id,username,BCrypt.hashpw(password,BCrypt.gensalt()),email,role,countriesTracked);
     }
 
     @Override

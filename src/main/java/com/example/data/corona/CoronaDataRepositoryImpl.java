@@ -1,7 +1,6 @@
 package com.example.data.corona;
 
 import lombok.Value;
-import org.springframework.data.domain.Example;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -37,6 +36,6 @@ public class CoronaDataRepositoryImpl implements CoronaDataRepository {
     @Override
     public boolean hasDataForToday() {
         CoronaVirusDocumentDB coronaVirusDocumentDB = coronaDataMongoDB.findByDate(LocalDate.now());
-        return coronaDataMongoDB.exists(Example.of(coronaVirusDocumentDB));
+        return !(coronaVirusDocumentDB == null);
     }
 }

@@ -1,9 +1,6 @@
 package com.example.data;
 
-import com.example.data.user.User;
-import com.example.data.user.UserRepository;
-import com.example.data.user.UserRole;
-import com.example.data.user.UserService;
+import com.example.data.user.*;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -14,12 +11,14 @@ import static org.junit.Assert.*;
 public class UserTests {
 
     UserRepository userRepository = new UserRepositoryInMemory();
-    private final UserService userService = new UserService(userRepository);
+    UserEmailService userEmailService = UserEmailService.createService();
+    private final UserService userService = new UserService(userRepository,userEmailService);
     @Test
     public void shouldVerifyUserSuccessfully(){
         final User user = new User(UUID.randomUUID().toString(),
                 "Arkadiusz",
                 "password123",
+                "email",
                 UserRole.ADMIN,
                 Collections.emptyList());
 
@@ -32,6 +31,7 @@ public class UserTests {
         final User user = new User(UUID.randomUUID().toString(),
                 "Arkadiusz",
                 "password123",
+                "email",
                 UserRole.ADMIN,
                 Collections.emptyList());
         assertNotNull(userService.addUserToDb(user));
@@ -41,6 +41,7 @@ public class UserTests {
         final User user = new User(UUID.randomUUID().toString(),
                 "Arkadiusz",
                 "password123",
+                "email",
                 UserRole.ADMIN,
                 Collections.emptyList());
 

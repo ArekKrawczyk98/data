@@ -31,8 +31,8 @@ public class UserDBTests {
 
     @Before
     public void setup(){
-        User user1 = new User(UUIDForUser1,"Arek","password", UserRole.ADMIN, Collections.emptyList());
-        User user2 = new User(UUIDForUser2,"Piotr","pass2",UserRole.ADMIN,countriesForUser2);
+        User user1 = new User(UUIDForUser1,"Arek","password","email", UserRole.ADMIN, Collections.emptyList());
+        User user2 = new User(UUIDForUser2,"Piotr","pass2","email",UserRole.ADMIN,countriesForUser2);
         this.userMongoData.save(user1);
         this.userMongoData.save(user2);
     }

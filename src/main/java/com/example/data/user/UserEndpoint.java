@@ -1,12 +1,13 @@
 package com.example.data.user;
 
+import com.example.data.user.dto.ChangeUsernameDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @AllArgsConstructor
 public class UserEndpoint {
 

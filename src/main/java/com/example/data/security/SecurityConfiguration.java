@@ -25,8 +25,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //todo : configure endpoints
-        super.configure(http);
+      http.csrf().disable().authorizeRequests().antMatchers("/register").permitAll();
     }
 
     @Bean
