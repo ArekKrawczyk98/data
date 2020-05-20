@@ -14,9 +14,8 @@ public class UserEmailService {
     private final UserEmailConfig emailConfig;
 
 
-    public static UserEmailService createService() {
+    public static UserEmailService createService(UserEmailConfig emailConfig) {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        UserEmailConfig emailConfig = new UserEmailConfig();
         mailSender.setHost(emailConfig.getHost());
         mailSender.setPort(emailConfig.getPort());
         mailSender.setUsername(emailConfig.getUsername());

@@ -25,7 +25,7 @@ public class UserConfiguration {
         return new UserEmailConfig();
     }
     @Bean
-    UserEmailService userEmailService(){
-        return UserEmailService.createService();
+    UserEmailService userEmailService(UserEmailConfig userEmailConfig){
+        return UserEmailService.createService(userEmailConfig);
     }
 }

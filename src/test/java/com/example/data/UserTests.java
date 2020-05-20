@@ -11,7 +11,8 @@ import static org.junit.Assert.*;
 public class UserTests {
 
     UserRepository userRepository = new UserRepositoryInMemory();
-    UserEmailService userEmailService = UserEmailService.createService();
+    UserEmailConfig userEmailConfig = new UserEmailConfig();
+    UserEmailService userEmailService = UserEmailService.createService(userEmailConfig);
     private final UserService userService = new UserService(userRepository,userEmailService);
     @Test
     public void shouldVerifyUserSuccessfully(){
